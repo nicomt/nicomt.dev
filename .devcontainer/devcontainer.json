@@ -1,0 +1,31 @@
+{
+	"name": "Node.js",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/shinepukur/devcontainer-features/vale:1": {}
+	},
+	"runArgs": ["--network", "host"],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Vue.volar",
+				"dbaeumer.vscode-eslint",
+				"EditorConfig.EditorConfig",
+				"DavidAnson.vscode-markdownlint",
+				"esbenp.prettier-vscode",
+				"tamasfe.even-better-toml"
+			],
+			"settings": {
+				"eslint.useFlatConfig": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode"
+			}
+		}
+	},
+	"portsAttributes": {
+		"5173": {
+			"label": "Vite Dev Server",
+			"onAutoForward": "notify"
+		}
+	}
+}
