@@ -1,1 +1,3 @@
-My personal website https://nicomt.dev
+# nicomt.dev
+
+My personal website <https://nicomt.dev>
