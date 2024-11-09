@@ -1,5 +1,8 @@
 name: Deploy
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -22,6 +25,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build & Deploy Worker
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: ${{ github.event_name == 'pull_request' && 'versions upload --tag ${{ github. }}'  || 'deploy' }}
+      
+      - name: Comment deploy url
+        uses: mshick/add-pr-comment@v2.8.2
+        with:
+          message-id: cloudflare-deploy
+          message: |
+            ### <span aria-hidden="true">✅</span> Deploy Preview ready!
+
+            |  Name | Link |
+            |---------------------------------|------------------------|
+            |<span aria-hidden="true">🔨</span> Latest commit | ${{ github.sha }} |
+            |<span aria-hidden="true">🔍</span> Latest deploy log | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+            |<span aria-hidden="true">😎</span> Deploy Preview Url | [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }}) |
+            ---
