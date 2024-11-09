@@ -33,7 +33,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: ${{ github.event_name == 'pull_request' && 'versions upload'  || 'deploy' }}
+          command: ${{ github.event_name == 'pull_request' && 'versions upload --tag ${{ github.head_ref }}'  || 'deploy' }}
       
       - name: Comment deploy url
         uses: mshick/add-pr-comment@v2.8.2
