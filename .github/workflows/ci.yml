@@ -35,6 +35,20 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           command: ${{ github.event_name == 'pull_request' && format('versions upload --tag {0}', github.head_ref)  || 'deploy' }}
       
+      - name: Extract Deployed URL
+        id: extract-preview-url
+        env:
+          PRODUCTION_URL: ${{ steps.deploy.outputs.deployment-url }}
+          WRANGLER_OUTPUT: ${{ steps.deploy.outputs.command-output }}
+          IS_PR: ${{ github.event_name == 'pull_request' }}
+        run: |
+          if [ "$IS_PR" = "true" ]; then
+            echo "preview-url=$PRODUCTION_URL" >> $GITHUB_OUTPUT
+          else
+            echo "preview-url=$(echo ${WRANGLER_OUTPUT} | grep -o 'https://[^ ]*')" >> $GITHUB_OUTPUT
+          fi
+          
+
       - name: Comment deploy url
         uses: mshick/add-pr-comment@v2.8.2
         with:
@@ -46,5 +60,5 @@ jobs:
             |---------------------------------|------------------------|
             |<span aria-hidden="true">🔨</span> Latest commit | ${{ github.sha }} |
             |<span aria-hidden="true">🔍</span> Latest deploy log | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
-            |<span aria-hidden="true">😎</span> Deploy Preview Url | [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }}) |
+            |<span aria-hidden="true">😎</span> Deploy Preview Url | [${{ steps.extract-preview-url.outputs.preview-url }}](${{ steps.extract-preview-url.outputs.preview-url }}) |
             ---
