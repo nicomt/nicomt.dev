@@ -6,7 +6,7 @@ import {
   type EquatorialCoordinate,
 } from '@observerly/astrometry';
 import memoize from 'fast-memoize';
-import { cachedAsync, rgbToHex } from '../common/utils';
+import { rgbToHex } from '../common/utils';
 import { colorTemperature2rgb } from '../common/colorTemp';
 // @ts-expect-error: Bright star catalog file
 import starCatalogUrl from '../data/star_catalog.csv?url';
@@ -65,7 +65,6 @@ interface WorkerUpdateMessage {
 }
 
 type WorkerMessage = WorkerInitMessage | WorkerUpdateMessage;
-type StarDb = Record<string, Star>;
 
 const clamp = (value: number, min: number = 0, max: number = 1) =>
   Math.min(Math.max(value, min), max);
@@ -92,7 +91,7 @@ class Star {
     // This is bullshit math, but is fine tuned to make the stars look good
     const angularDiamFactor = clamp(this.angularDiameter / (3600000 / 180), 0.0003, 0.0005);
     const magnitudeFactor = clamp(1 - (this.vmag - 1) / 6);
-    this.apparentSizeFactor = (angularDiamFactor * 10 ** (0.6 * (magnitudeFactor - 0.5))) * 4;
+    this.apparentSizeFactor = angularDiamFactor * 10 ** (0.6 * (magnitudeFactor - 0.5)) * 4;
 
     const colorRgb = colorTemperature2rgb(this.k);
     const whiteOffset = 50;
@@ -101,10 +100,10 @@ class Star {
     const b = Math.min(255, colorRgb.blue + whiteOffset);
     this.color = rgbToHex(r, g, b);
     this.opacity = clamp(magnitudeFactor, 0, 0.8) + 0.2;
-    this.project = memoize(this._project.bind(this));
+    this.project = memoize(this.projectInner.bind(this));
   }
 
-  _project(observer: Observer) {
+  private projectInner(observer: Observer) {
     const coord = convertEquatorialToHorizontal(observer.time, observer.location, this.pos);
     return convertHorizontalToStereo(coord, {
       width: observer.skySize,
@@ -123,10 +122,11 @@ class Star {
       color: this.color,
       fillOpacity: this.opacity,
       twinkleDuration: 0,
-    }
+    };
   }
 }
 
+type StarDb = Record<string, Star>;
 
 interface ConstellationEdge {
   fromStar: Star;
@@ -143,8 +143,6 @@ interface ConstellationEdgeProjection {
 interface ConstellationProjection {
   edges: ConstellationEdgeProjection[];
 }
-
-type ConstellationDb = Record<string, Constellation>;
 
 class Constellation {
   code: string;
@@ -178,29 +176,32 @@ class Constellation {
   }
 }
 
-const fetchStars = cachedAsync(async (): Promise<StarDb> => {
+type ConstellationDb = Record<string, Constellation>;
+
+const fetchStars = memoize(async (): Promise<StarDb> => {
   const response = await (await fetch(starCatalogUrl)).text();
   const lines = response.split('\n');
   lines.shift();
 
   const stars: StarDb = {};
   for (const line of lines) {
-    if (line.trim().length === 0) continue;
-    const [hip, ra, dec, k, vmag, angularDiameter] = line.split(',');
-    stars[hip] = new Star(hip, {
-      pos: {
-        ra: parseFloat(ra),
-        dec: parseFloat(dec),
-      },
-      vmag: parseFloat(vmag),
-      angularDiameter: parseFloat(angularDiameter),
-      k: parseFloat(k),
-    });
+    if (line.trim().length > 0) {
+      const [hip, ra, dec, k, vmag, angularDiameter] = line.split(',');
+      stars[hip] = new Star(hip, {
+        pos: {
+          ra: parseFloat(ra),
+          dec: parseFloat(dec),
+        },
+        vmag: parseFloat(vmag),
+        angularDiameter: parseFloat(angularDiameter),
+        k: parseFloat(k),
+      });
+    }
   }
   return stars;
 });
 
-const fetchConstellations = cachedAsync(async (stars: StarDb): Promise<ConstellationDb> => {
+const fetchConstellations = memoize(async (stars: StarDb): Promise<ConstellationDb> => {
   const constellationData: ConstellationData = await (await fetch(constelllations)).json();
   const constellations: ConstellationDb = {};
   for (const [code, constellationIds] of Object.entries(constellationData)) {
@@ -208,7 +209,6 @@ const fetchConstellations = cachedAsync(async (stars: StarDb): Promise<Constella
   }
   return constellations;
 });
-
 
 class NightSkyRenderer {
   private canvas: OffscreenCanvas;
@@ -237,7 +237,7 @@ class NightSkyRenderer {
     const { time, latitude, longitude, skySize, viewSize } = update;
     this.resize(viewSize.width, viewSize.height);
 
-    const stars = await fetchStars()
+    const stars = await fetchStars();
     const constellations = await fetchConstellations(stars);
 
     const xOffset = viewSize.width / 2;

@@ -1,13 +1,3 @@
-export function cachedAsync<T>(fn: (...args: any[]) => Promise<T>) {
-  let promise: Promise<T>;
-  return (...args: any[]) => {
-    if (!promise) {
-      promise = fn(...args);
-    }
-    return promise;
-  };
-}
-
 function componentToHex(c: number) {
   const hex = Math.max(Math.min(Math.round(c), 255), 0).toString(16);
   return hex.length === 1 ? '0' + hex : hex;

@@ -42,7 +42,8 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', {
         destructuredArrayIgnorePattern: '^_'
       }],
-      'lines-between-class-members': ['warning', 'always', { exceptAfterSingleLine: true }],
+      'lines-between-class-members': ['warn', 'always', { exceptAfterSingleLine: true }],
+      'no-restricted-syntax': ['off', 'ForOfStatement'],
     }
   })
 ];
