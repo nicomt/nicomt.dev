@@ -1,0 +1,9 @@
+img.thumb {
+    display: inline !important;
+    padding: 10px;
+    height: 250px;
+}
+
+p:has(img.thumb) {
+    text-align: center;
+}
