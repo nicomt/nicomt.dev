@@ -1,8 +1,15 @@
 name: Deploy
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,6 +29,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build & Deploy Worker
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: ${{ github.event_name == 'pull_request' && format('versions upload --tag {0}', github.head_ref)  || 'deploy' }}
+      
+      - name: Extract Deployed URL
+        id: deployment-url
+        env:
+          PRODUCTION_URL: ${{ steps.deploy.outputs.deployment-url }}
+          WRANGLER_OUTPUT: ${{ steps.deploy.outputs.command-output }}
+          IS_PR: ${{ github.event_name == 'pull_request' }}
+        run: |
+          if [ "$IS_PR" = "true" ]; then
+            echo "deployment-url=$(echo ${WRANGLER_OUTPUT} | grep -i "Version Preview URL" | grep -o 'https://[^ ]*' | tail -1)" >> $GITHUB_OUTPUT
+          else
+            echo "deployment-url=$PRODUCTION_URL" >> $GITHUB_OUTPUT
+          fi
+          
+
+      - name: Comment deploy url
+        uses: mshick/add-pr-comment@v2.8.2
+        with:
+          message-id: cloudflare-deploy
+          message: |
+            ### <span aria-hidden="true">✅</span> Deploy Preview ready!
+
+            |  Name | Link |
+            |---------------------------------|------------------------|
+            |<span aria-hidden="true">🔨</span> Latest commit | ${{ github.sha }} |
+            |<span aria-hidden="true">🔍</span> Latest deploy log | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+            |<span aria-hidden="true">😎</span> Deployment Url | [${{ steps.deployment-url.outputs.deployment-url }}](${{ steps.deployment-url.outputs.deployment-url }}) |
+            ---
