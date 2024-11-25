@@ -10,7 +10,6 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Projects', link: '/projects/bird-sentry/hardware.md' },
     ],
-
     sidebar: [
       {
         text: 'Projects',
@@ -22,7 +21,6 @@ export default defineConfig({
         ],
       },
     ],
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/nicomt' },
       { icon: 'linkedin', link: 'https://www.linkedin.com/in/nicomt' },
@@ -35,5 +33,12 @@ export default defineConfig({
     build: {
       sourcemap: true,
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler'
+        }
+      }
+    }
   },
 });
