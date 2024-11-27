@@ -3,7 +3,8 @@
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/shinepukur/devcontainer-features/vale:1": {}
+		"ghcr.io/shinepukur/devcontainer-features/vale:1": {},
+		"ghcr.io/devcontainers/features/git-lfs:1": {}
 	},
 	"runArgs": ["--network", "host"],
 	"customizations": {

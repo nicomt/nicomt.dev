@@ -175,3 +175,6 @@ src/.vitepress/cache
 
 .dev.vars
 .wrangler/
+
+# vale
+styles/

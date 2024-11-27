@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { imagetools } from 'vite-imagetools';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -8,24 +9,43 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Blog', link: '/blog/coming-soon.md' },
+      { text: 'Projects', link: '/projects/bird-sentry/hardware.md' },
     ],
-
     sidebar: [
       {
-        text: 'Blog',
-        items: [{ text: 'Coming Soon', link: '/blog/coming-soon.md' }],
+        text: 'Projects',
+        items: [
+          {
+            text: 'Bird Sentry',
+            items: [{ text: 'Hardware', link: '/projects/bird-sentry/hardware.md' }],
+          },
+        ],
       },
     ],
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/nicomt' },
       { icon: 'linkedin', link: 'https://www.linkedin.com/in/nicomt' },
     ],
+    editLink: {
+      pattern: 'https://github.com/nicomt/nicomt.dev/edit/main/src/:path',
+    },
+  },
+  vue: {
+    template: {
+      transformAssetUrls: {
+        base: null,
+        includeAbsolute: true,
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler'
+        }
+      }
+    }
   },
   vite: {
-    build: {
-      sourcemap: true,
-    },
+    plugins: [imagetools()],
   },
 });
