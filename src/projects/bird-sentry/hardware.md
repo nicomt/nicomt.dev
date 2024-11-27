@@ -47,6 +47,8 @@ The pan-tilt servo mount comes with a set of screws, gears and bearings. I didn'
 
 [Pan-Tilt Assembly Video](/elechawk-pan-tilt-assembly.mp4)
 
+[![Pan-Tilt Illustration](./images/pan-tilt-illustration.png?w=300)](./images/pan-tilt-illustration.png){target=_blank data-pswp-width="629" data-pswp-height="608"}
+
 ## Water Firing Mechanism
 
 1. Cut a piece of vinyl tubing to the desired length and attach male couplers to both ends of the tubing.
