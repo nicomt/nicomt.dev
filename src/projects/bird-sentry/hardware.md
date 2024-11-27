@@ -63,8 +63,8 @@ The pan-tilt servo mount comes with a set of screws, gears and bearings. I didn'
 
 3. Secure the nozzle to the servo pan-tilt using zip ties. I found best to route the zip tie over the screw section of the nozzle and tighten the orange cap to secure it in place, otherwise the nozzle might wiggle when the servos move.
 
-[![Nozzle Attachment 1](./images/nozzle-attachment1.jpg?h=307)](./images/nozzle-attachment1.jpg){target=_blank data-pswp-width="2048" data-pswp-height="1536"}
-[![Nozzle Attachment 2](./images/nozzle-attachment2.jpg?h=307)](./images/nozzle-attachment1.jpg){target=_blank data-pswp-width="2048" data-pswp-height="1536"}
+[![Nozzle Attachment 1](./images/nozzle-attachment1.jpg?h=307)](./images/nozzle-attachment1.jpg){target=_blank data-pswp-width="1536" data-pswp-height="2048"}
+[![Nozzle Attachment 2](./images/nozzle-attachment2.jpg?h=307)](./images/nozzle-attachment2.jpg){target=_blank data-pswp-width="1536" data-pswp-height="2048"}
 
 4. Now we can attach the vinyl tubing from the water pump to the nozzle. The couplers should fit snuggly into the pump and nozzle, but you can use more heat shrink tubing to secure them in place if needed.
 
