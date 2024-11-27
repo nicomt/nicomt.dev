@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { imagetools } from 'vite-imagetools';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -29,9 +30,12 @@ export default defineConfig({
       pattern: 'https://github.com/nicomt/nicomt.dev/edit/main/src/:path',
     },
   },
-  vite: {
-    build: {
-      sourcemap: true,
+  vue: {
+    template: {
+      transformAssetUrls: {
+        base: null,
+        includeAbsolute: true,
+      },
     },
     css: {
       preprocessorOptions: {
@@ -40,5 +44,8 @@ export default defineConfig({
         }
       }
     }
+  },
+  vite: {
+    plugins: [imagetools()],
   },
 });

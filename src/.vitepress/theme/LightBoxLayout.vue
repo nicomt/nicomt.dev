@@ -2,23 +2,25 @@
 import DefaultTheme from 'vitepress/theme';
 import { onMounted } from 'vue';
 import { useRouter } from 'vitepress';
-import mediumZoom from 'medium-zoom';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+import 'photoswipe/style.css';
 
 const { Layout } = DefaultTheme;
 const router = useRouter();
 
-// Setup medium zoom with the desired options
-const setupMediumZoom = () => {
-  mediumZoom("[data-zoomable]", {
-    background: "transparent",
+const setupPhotoswipe = () => {
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '.gallery-page p:has(img)',
+    children: 'a',
+    pswpModule: () => import('photoswipe')
   });
+  lightbox.init();
 };
 
-// Apply medium zoom on load
-onMounted(setupMediumZoom);
+onMounted(setupPhotoswipe);
 
-// Subscribe to route changes to re-apply medium zoom effect
-router.onAfterRouteChanged = setupMediumZoom;
+router.onAfterRouteChanged = setupPhotoswipe;
 </script>
 
 <template>

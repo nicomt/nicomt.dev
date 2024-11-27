@@ -1,9 +1,9 @@
-img.thumb {
+.gallery-page img {
     display: inline !important;
-    padding: 10px;
-    height: 250px;
+    margin: 10px;
+    border-radius: 3px;
 }
 
-p:has(img.thumb) {
+.gallery-page p:has(img) {
     text-align: center;
 }
