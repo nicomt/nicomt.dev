@@ -97,3 +97,5 @@ I placed the pan-tilt on top of the enclosure to utilize the height and stabiliz
 <video controls width="500px" style="margin:auto">
   <source src="/bird-sentry.mp4" type="video/mp4">
 </video>
+
+The next blog post will cover the software side of the Bird Sentry robot. Stay tuned!
