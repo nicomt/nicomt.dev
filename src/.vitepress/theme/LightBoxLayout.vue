@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import DefaultTheme from 'vitepress/theme';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vitepress';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
@@ -9,18 +9,40 @@ import 'photoswipe/style.css';
 const { Layout } = DefaultTheme;
 const router = useRouter();
 
-const setupPhotoswipe = () => {
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '.gallery-page p:has(img)',
-    children: 'a',
+let lightbox: PhotoSwipeLightbox | null = null;
+
+const initLightbox = () => {
+  if (lightbox) {
+    lightbox.destroy();
+    lightbox = null;
+  }
+  lightbox = new PhotoSwipeLightbox({
+    gallery: '.gallery-page',
+    // Match only anchors that link to images; avoids relying on :has()
+    children:
+      'a[href$=".jpg"], a[href$=".jpeg"], a[href$=".png"], a[href$=".webp"], a[href$=".gif"], a[href$=".avif"], a[href$=".JPG"], a[href$=".PNG"]',
     pswpModule: () => import('photoswipe')
   });
   lightbox.init();
 };
 
-onMounted(setupPhotoswipe);
+onMounted(() => {
+  initLightbox();
+  router.onAfterRouteChanged = () => {
+    if (lightbox) {
+      lightbox.refresh();
+    } else {
+      initLightbox();
+    }
+  };
+});
 
-router.onAfterRouteChanged = setupPhotoswipe;
+onUnmounted(() => {
+  if (lightbox) {
+    lightbox.destroy();
+    lightbox = null;
+  }
+});
 </script>
 
 <template>
@@ -35,5 +57,15 @@ router.onAfterRouteChanged = setupPhotoswipe;
 .medium-zoom-overlay,
 .medium-zoom-image--opened {
   z-index: 999;
+}
+
+/* Ensure PhotoSwipe overlays appear above site chrome */
+.pswp {
+  z-index: 9999;
+}
+
+/* Make sure large images scale to fit viewport */
+.pswp__img {
+  object-fit: contain;
 }
 </style>
