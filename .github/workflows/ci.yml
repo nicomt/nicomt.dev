@@ -28,6 +28,13 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
+
+      - name: Lint prose with Vale
+        uses: errata-ai/vale-action@v2
+        with:
+          files: |
+            src/**/*.md
+
       - name: Build & Deploy Worker
         id: deploy
         uses: cloudflare/wrangler-action@v3
