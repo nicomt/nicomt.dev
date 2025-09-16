@@ -17,10 +17,8 @@ const initLightbox = () => {
     lightbox = null;
   }
   lightbox = new PhotoSwipeLightbox({
-    gallery: '.gallery-page',
-    // Match only anchors that link to images; avoids relying on :has()
-    children:
-      'a[href$=".jpg"], a[href$=".jpeg"], a[href$=".png"], a[href$=".webp"], a[href$=".gif"], a[href$=".avif"], a[href$=".JPG"], a[href$=".PNG"]',
+    gallery: '.gallery-page p:has(img)',
+    children: 'a',
     pswpModule: () => import('photoswipe')
   });
   lightbox.init();
