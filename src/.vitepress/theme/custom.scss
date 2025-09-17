@@ -1,0 +1,9 @@
+.gallery-page img {
+    display: inline !important;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+.gallery-page p:has(img) {
+    text-align: center;
+}
