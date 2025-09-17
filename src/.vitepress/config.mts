@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { imagetools } from 'vite-imagetools';
+import customBlock from './mdit';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -35,17 +36,36 @@ export default defineConfig({
       transformAssetUrls: {
         base: null,
         includeAbsolute: true,
+        a: ['href'],
+        video: ['src', 'poster'],
+        source: ['src'],
+        img: ['src'],
+        image: ['xlink:href', 'href'],
+        use: ['xlink:href', 'href'],
       },
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler'
-        }
-      }
-    }
   },
   vite: {
     plugins: [imagetools()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
+  },
+  markdown: {
+    preConfig(md) {
+      md.use(customBlock, {
+        video(url, attrs) {
+          return `
+            <video ${attrs}>
+                <source src="${url}" type="video/mp4">
+            </video>
+          `;
+        },
+      });
+    },
   },
 });

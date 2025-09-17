@@ -72,7 +72,7 @@ This diagram shows how I wired all the components to the Raspberry Pi Zero 2 W a
 > The servos I selected can have high power spikes which cause the Raspberry PI to reboot. I fixed this by powering the Raspberry PI with an external DC-DC Buck Converter.
 Before using the external DC-DC Buck Converter you **MUST** first remove the 0R resistor from the WaveShare PWM Servo HAT. You can find the full explanation in the [WaveShare Wiki](https://www.waveshare.com/wiki/Servo_Driver_HAT).
 
-[![Wiring Diagram](./images/wiring-diagram.png?w=688)](./images/wiring-diagram.pngformat=avif){target=_blank data-pswp-width="3335" data-pswp-height="1997"}
+[![Wiring Diagram](./images/wiring-diagram.png?w=688)](./images/wiring-diagram.png){target=_blank data-pswp-width="3335" data-pswp-height="1997"}
 
 ## Enclosure
 
@@ -90,9 +90,7 @@ I placed the pan-tilt on top of the enclosure to use the height and stabilize it
 
 ## Final Result
 
-<video controls width="500px" style="margin:auto">
-  <source src="/bird-sentry.mp4" type="video/mp4">
-</video>
+@[video](/bird-sentry.mp4){controls width="500px" style="margin:auto"}
 
 In short: it works. Since setting it up, pigeons have kept their distance and the balcony finally stays quiet.
 
