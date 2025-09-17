@@ -3,7 +3,8 @@ const embedRE = /@\[([\w-]+)\]\(([\s\S]+)\)(.*)/im
 
 export type CustomBlockOptions = Record<string, (arg: string, attrs: string) => string>
 
-// Fork from
+// Fork from https://github.com/posva/markdown-it-custom-block
+// Modified to support attributes on the custom block
 const customBlock = (md: any, options: CustomBlockOptions = {}): void => {
   // Renderer for our custom token
   // eslint-disable-next-line no-param-reassign
