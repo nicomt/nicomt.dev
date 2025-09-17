@@ -15,17 +15,13 @@ const { isDark } = useData();
     <div class="main">
       <div class="intro">
         <p>
-          Hi, I'm Nicolas Martinez, a full-stack developer based in Toronto,
-          Canada. I've had the opportunity to work across IoT, Cloud, and Web
-          technologies, building systems that connect the physical and digital
-          spaces. I'm currently part of a solar technology company, where I get
-          to apply my passion for software to projects that contribute to a
-          sustainable future.
+          Hi, I'm Nicolas, a full-stack developer in Toronto. I work across IoT, cloud, and web
+          technologies, building practical systems and tools. I'm currently at a solar technology
+          company, applying software to projects with real-world impact.
         </p>
         <p>
-          This site is a showcase of my projects and the things I've built—a
-          place to share demos, experiments, and creative work. Feel free to
-          explore, and reach out if you'd like to connect!
+          This site showcases projects I've built, demos, experiments, and creative work. Take a
+          look, and reach out if you'd like to connect.
         </p>
       </div>
     </div>
