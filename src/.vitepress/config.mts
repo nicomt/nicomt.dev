@@ -74,4 +74,7 @@ export default defineConfig({
       });
     },
   },
+  sitemap: {
+    hostname: 'https://nicomt.dev',
+  }
 });
